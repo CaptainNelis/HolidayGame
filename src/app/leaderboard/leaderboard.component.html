@@ -1,0 +1,22 @@
+<md-card>
+  <md-card-title align="center">Leaderboard</md-card-title>
+  <md-nav-list>
+    <md-list-item *ngFor="let player of players$ | async">
+      <label md-line>{{player.$key | username | async}}</label>
+      <md-progress-bar
+          [color]="getCooldownColor(player.isLocked)"
+          [mode]="'determinate'"
+          [value]="player.lastPlayed | cooldownPercentage | async">
+      </md-progress-bar>
+    </md-list-item>
+  </md-nav-list>
+  <md-card-actions *ngIf="player$ | async" align="center">
+    <button *ngIf="isChallenged$ | async; else hasChallenged" [routerLink]="['/challenge']" color="accent" md-raised-button>You are Challenged!</button>
+    <ng-template #hasChallenged>
+      <button *ngIf="hasChallenged$ | async; else challenge" [routerLink]="['/challenge']" color="primary" md-button>You challenged {{(opponent$ | async).$key | username | async}}</button>
+    </ng-template>
+    <ng-template #challenge>
+      <button *ngIf="canChallenge$ | async" [routerLink]="['/challenge']" (click)="initChallenge()" color="primary" md-raised-button>Challenge {{(opponent$ | async).$key | username | async}}</button>
+    </ng-template>
+  </md-card-actions>
+</md-card>

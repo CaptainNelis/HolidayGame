@@ -1,0 +1,26 @@
+{
+  "rules": {
+    "challenges": {
+      ".indexOn": ["challenger", "challengee"],
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "players": {
+      ".indexOn": "position",
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "queues": {
+      "requestChallenge": {
+        "$uid": {
+          ".read": "$uid === auth.uid",
+          ".write": "$uid === auth.uid"
+        }
+      }
+    },
+    "users": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}

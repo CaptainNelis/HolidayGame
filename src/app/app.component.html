@@ -1,3 +1,69 @@
-<h1>
-  {{title}}
-</h1>
+<md-sidenav-container fullscreen>
+
+  <!--Left side menu-->
+  <md-sidenav #sidenavleft mode="push" class="sidenav">
+    <md-toolbar color="primary">
+      <span>Menu</span>
+      <span class="example-spacer"></span>
+      <button md-icon-button (click)="sidenavleft.close()">
+        <md-icon>close</md-icon>
+      </button>
+    </md-toolbar>
+    <md-nav-list>
+      <md-list-item [routerLink]="['/challenge']" (click)="sidenavleft.close()">
+        <a md-line>Challenge</a>
+      </md-list-item>
+      <md-list-item [routerLink]="['/leaderboard']" (click)="sidenavleft.close()">
+        <a md-line>Leaderboard</a>
+      </md-list-item>
+    </md-nav-list>
+  </md-sidenav>
+
+  <!--right side menu-->
+  <md-sidenav #sidenavright mode="push" align="end" class="sidenav">
+    <md-toolbar color="primary">
+      <span>Account</span>
+      <span class="example-spacer"></span>
+      <button md-icon-button (click)="sidenavright.close()">
+        <md-icon>close</md-icon>
+      </button>
+    </md-toolbar>
+    <md-nav-list *ngIf="user$ | async; else guest">
+      <md-list-item *ngIf="player$ | async; else noPlayer" (click)="leave()">
+        <a md-line>Leave Game</a>
+      </md-list-item>
+      <ng-template #noPlayer>
+        <md-list-item (click)="join()">
+          <a md-line>Join Game</a>
+        </md-list-item>
+      </ng-template>
+      <md-list-item [routerLink]="['/account-settings']" (click)="sidenavright.close()">
+        <a md-line>Account Settings</a>
+      </md-list-item>
+      <md-list-item (click)="sidenavright.close(); userService.logout()">
+        <a md-line>Logout</a>
+      </md-list-item>
+    </md-nav-list>
+    <ng-template #guest>
+      <md-nav-list>
+        <md-list-item [routerLink]="['/login']" (click)="sidenavright.close()">
+          <a md-line>Login</a>
+        </md-list-item>
+        <md-list-item [routerLink]="['/register']" (click)="sidenavright.close()">
+          <a md-line>Register</a>
+        </md-list-item>
+      </md-nav-list>
+    </ng-template>
+  </md-sidenav>
+
+  <!--main page-->
+  <md-toolbar color="primary">
+    <md-icon (click)="sidenavleft.open()">menu</md-icon>
+    <span class="example-spacer"></span>
+    <span>HolidayGame</span>
+    <span class="example-spacer"></span>
+    <md-icon (click)="sidenavright.open()">account_box</md-icon>
+  </md-toolbar>
+  <router-outlet></router-outlet>
+
+</md-sidenav-container>
