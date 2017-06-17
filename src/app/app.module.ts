@@ -14,7 +14,7 @@ import { PlayerService } from '../services/player.service';
 import { UserService } from '../services/user.service';
 import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MATERIAL_MODULES } from './holiday-material/holiday-material.module';
+import { MATERIAL_MODULES } from '../modules/material.module';
 import { environment } from '../environments/environment';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { UsernamePipe } from '../pipes/username.pipe';

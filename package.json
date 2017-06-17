@@ -6,11 +6,10 @@
     "postinstall": "cd functions && npm install",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && tsc --project functions",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "predeploy": "ng build && tsc --project functions",
     "deploy": "firebase deploy"
   },
   "private": true,

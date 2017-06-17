@@ -8,12 +8,14 @@ import { AFUnwrappedDataSnapshot } from 'angularfire2/interfaces';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { Challenge } from '../models/challenge';
+import { ChallengeState } from '../enums/challenge-state.enum';
 
 @Injectable()
 export class ChallengeService {
   readonly canChallenge$: Observable<boolean>;
   readonly hasChallenged$: Observable<Challenge>;
   readonly isChallenged$: Observable<Challenge>;
+  readonly challengeState$: Observable<ChallengeState>;
 
   constructor(private angularFireDatabase: AngularFireDatabase,
               private playerService: PlayerService,
@@ -21,9 +23,11 @@ export class ChallengeService {
     this.canChallenge$ = this.getCanChallenge$();
     this.hasChallenged$ = this.getHasChallenged$();
     this.isChallenged$ = this.getIsChallenged$();
+    this.challengeState$ = this.getChallengeState$();
     this.isChallenged$.subscribe(data => console.log('isChallenged$', data));
     this.canChallenge$.subscribe(data => console.log('canChallenge$', data));
     this.hasChallenged$.subscribe(data => console.log('hasChallenged', data));
+    this.challengeState$.subscribe(data => console.log('challengeState', data));
   }
 
   /**
@@ -60,7 +64,7 @@ export class ChallengeService {
               equalTo: player.$key
             }
           })
-            .map((challenges: AFUnwrappedDataSnapshot) => challenges[0] ? challenges[0] : null)
+            .map((challenges: AFUnwrappedDataSnapshot) => challenges[0] ? challenges[0] : false)
         } else {
           return Observable.of(null);
         }
@@ -83,9 +87,34 @@ export class ChallengeService {
               equalTo: player.$key
             }
           })
-            .map((challenges: AFUnwrappedDataSnapshot) => challenges[0] ? challenges[0] : null)
+            .map((challenges: AFUnwrappedDataSnapshot) => challenges[0] ? challenges[0] : false)
         } else {
           return Observable.of(null);
+        }
+      })
+      .distinctUntilChanged()
+      .shareReplay(1)
+  }
+
+  private getChallengeState$(): Observable<ChallengeState> {
+    return this.playerService.player$
+      .switchMap((player: Player) => {
+        if (player) {
+          return this.isChallenged$
+            .combineLatest(this.hasChallenged$, this.canChallenge$)
+            .switchMap(([isChallenged, hasChallenged, canChallenge]) => {
+              if (isChallenged) {
+                return Observable.of(ChallengeState.ISCHALLENGED);
+              } else if (hasChallenged) {
+                return Observable.of(ChallengeState.HASCHALLENGED);
+              } else if (canChallenge) {
+                return Observable.of(ChallengeState.CANCHALLENGE);
+              } else {
+                return Observable.of(ChallengeState.NOSTATE);
+              }
+            })
+        } else {
+          return Observable.of(ChallengeState.NOSTATE);
         }
       })
       .distinctUntilChanged()
@@ -100,7 +129,7 @@ export class ChallengeService {
   getChallengeCooldownPercentage$(lastPlayed: number): Observable<number> {
     return this.timeService.currentTime$
       .map((currentTime: number) => {
-        const percentage = ((((currentTime - lastPlayed) / 1000) / 60) * 100) / 10; // last value is minutes
+        const percentage = ((((currentTime - lastPlayed) / 1000) / 60) * 100) / 2; // last value is minutes
         if (percentage >= 100) {
           return 100;
         } else {
