@@ -1,10 +1,14 @@
-<md-card *ngIf="isChallenged$ | async; let challenge">
-  <md-card-title align="center">Challengeboard</md-card-title>
-  <md-card-content>
-    You have been challenged by {{challenge.challenger | username | async}}.
-  </md-card-content>
-  <md-card-actions align="center">
-    <button color="primary" md-raised-button>Accept</button>
-    <button color="warn" md-button>Decline</button>
-  </md-card-actions>
-</md-card>
+<div [ngSwitch]="challengeState$ | async">
+  <ng-template [ngSwitchCase]="0">
+    <app-challenge-nostate></app-challenge-nostate>
+  </ng-template>
+  <ng-template [ngSwitchCase]="1">
+    <app-challenge-is-challenged [challenge]="isChallenged$ | async"></app-challenge-is-challenged>
+  </ng-template>
+  <ng-template [ngSwitchCase]="2">
+    <app-challenge-has-challenged [challenge]="hasChallenged$ | async"></app-challenge-has-challenged>
+  </ng-template>
+  <ng-template [ngSwitchCase]="3">
+    <app-challenge-can-challenge [opponent]="opponent$ | async" (initChallenge)="initChallenge()"></app-challenge-can-challenge>
+  </ng-template>
+</div>

@@ -24,6 +24,10 @@ import { AngularFireModule } from 'angularfire2/angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { TimeService } from '../services/time.service';
 import { CooldownPercentagePipe } from '../pipes/cooldown-percentage.pipe';
+import { ChallengeNostateComponent } from './challenge/challenge-nostate/challenge-nostate.component';
+import { ChallengeIsChallengedComponent } from './challenge/challenge-is-challenged/challenge-is-challenged.component';
+import { ChallengeHasChallengedComponent } from './challenge/challenge-has-challenged/challenge-has-challenged.component';
+import { ChallengeCanChallengeComponent } from './challenge/challenge-can-challenge/challenge-can-challenge.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/leaderboard', pathMatch: 'full'},
@@ -44,6 +48,10 @@ const appRoutes: Routes = [
     AccountSettingsComponent,
     UsernamePipe,
     CooldownPercentagePipe,
+    ChallengeNostateComponent,
+    ChallengeIsChallengedComponent,
+    ChallengeHasChallengedComponent,
+    ChallengeCanChallengeComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseCredentials),

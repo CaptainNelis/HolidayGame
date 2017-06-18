@@ -96,6 +96,10 @@ export class ChallengeService {
       .shareReplay(1)
   }
 
+  /**
+   * Get challenge state.
+   * @returns {Observable<ChallengeState>}
+   */
   private getChallengeState$(): Observable<ChallengeState> {
     return this.playerService.player$
       .switchMap((player: Player) => {

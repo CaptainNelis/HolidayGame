@@ -1,0 +1,9 @@
+<md-card>
+  <md-card-title align="center">Challengeboard</md-card-title>
+  <md-card-content>
+    You can challengee {{opponent.$key | username | async}}.
+  </md-card-content>
+  <md-card-actions align="center">
+    <button (click)="emitInitChallenge()" color="primary" md-raised-button>Challenge</button>
+  </md-card-actions>
+</md-card>

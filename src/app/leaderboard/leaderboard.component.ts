@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Player } from '../../models/player';
 import { ChallengeService } from '../../services/challenge.service';
 import { Challenge } from '../../models/challenge';
+import { ChallengeState } from '../../enums/challenge-state.enum';
 
 @Component({
   selector: 'app-leaderboard',
@@ -14,18 +15,14 @@ export class LeaderboardComponent implements OnInit {
   player$: Observable<Player>;
   opponent$: Observable<Player>;
   players$: Observable<Player[]>;
-  isChallenged$: Observable<Challenge>;
-  canChallenge$: Observable<boolean>;
-  hasChallenged$: Observable<Challenge>;
+  challengeState$: Observable<ChallengeState>;
 
   constructor(private playerService: PlayerService,
               private challengeService: ChallengeService) {
     this.player$ = playerService.player$;
     this.opponent$ = playerService.opponent$;
     this.players$ = playerService.players$;
-    this.isChallenged$ = challengeService.isChallenged$;
-    this.canChallenge$ = challengeService.canChallenge$;
-    this.hasChallenged$ = challengeService.hasChallenged$;
+    this.challengeState$ = challengeService.challengeState$;
   }
 
   ngOnInit() {
