@@ -9,7 +9,8 @@ import {
   MdRippleModule,
   MdSidenavModule,
   MdToolbarModule,
-  MdSnackBarModule
+  MdSnackBarModule,
+  MdProgressSpinnerModule
 } from '@angular/material';
 
 export const MATERIAL_MODULES = [
@@ -23,5 +24,6 @@ export const MATERIAL_MODULES = [
   MdRippleModule,
   MdSidenavModule,
   MdToolbarModule,
-  MdSnackBarModule
+  MdSnackBarModule,
+  MdProgressSpinnerModule
 ];

@@ -1,3 +1,10 @@
-<p>
-  challenge-nostate works!
-</p>
+<md-card>
+  <md-card-title align="center">Challengeboard</md-card-title>
+  <md-card-content>
+    Please login or register.
+  </md-card-content>
+  <md-card-actions align="center">
+    <button [routerLink]="['/login']" color="primary" md-raised-button>Login</button>
+    <button [routerLink]="['/register']" color="primary" md-button>Register</button>
+  </md-card-actions>
+</md-card>

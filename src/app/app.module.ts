@@ -28,6 +28,8 @@ import { ChallengeNostateComponent } from './challenge/challenge-nostate/challen
 import { ChallengeIsChallengedComponent } from './challenge/challenge-is-challenged/challenge-is-challenged.component';
 import { ChallengeHasChallengedComponent } from './challenge/challenge-has-challenged/challenge-has-challenged.component';
 import { ChallengeCanChallengeComponent } from './challenge/challenge-can-challenge/challenge-can-challenge.component';
+import { ChallengeWaitingComponent } from './challenge/challenge-waiting/challenge-waiting.component';
+import { ChallengeFirstPlaceComponent } from './challenge/challenge-first-place/challenge-first-place.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/leaderboard', pathMatch: 'full'},
@@ -52,6 +54,8 @@ const appRoutes: Routes = [
     ChallengeIsChallengedComponent,
     ChallengeHasChallengedComponent,
     ChallengeCanChallengeComponent,
+    ChallengeWaitingComponent,
+    ChallengeFirstPlaceComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseCredentials),

@@ -2,9 +2,6 @@
   <md-card-title align="center">Challengeboard</md-card-title>
   <md-card-content>
     You have challenged {{challenge.challengee | username | async}}.
+    Wait for {{challenge.challengee | username | async}} to accept or decline your challenge.
   </md-card-content>
-  <md-card-actions align="center">
-    <button color="primary" md-raised-button>Accept</button>
-    <button color="warn" md-button>Decline</button>
-  </md-card-actions>
 </md-card>

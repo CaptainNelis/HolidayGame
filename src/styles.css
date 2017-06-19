@@ -10,6 +10,30 @@ body {
     margin: 0;
 }
 
+.loading {
+    opacity: 0;
+    transition: opacity .8s ease-in-out;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #000;
+    z-index: -1;
+}
+.loading {
+    opacity: 1;
+    z-index: 100;
+}
+.loading h1 {
+    color: #EEE;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translate(0, -50%);
+}
+
 md-card {
     margin: 2% 2% 0 2%;
 }
@@ -21,3 +45,6 @@ textarea {
     font-size: 16px;
 }
 
+md-spinner {
+    margin: auto;
+}

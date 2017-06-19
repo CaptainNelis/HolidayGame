@@ -1,7 +1,7 @@
 <md-card>
   <md-card-title align="center">Leaderboard</md-card-title>
-  <md-nav-list>
-    <md-list-item *ngFor="let player of players$ | async">
+  <md-list *ngIf="players$ | async; let players; else loading">
+    <md-list-item *ngFor="let player of players">
       <label md-line>{{player.$key | username | async}}</label>
       <md-progress-bar
           [color]="getCooldownColor(player.isLocked)"
@@ -9,18 +9,22 @@
           [value]="player.lastPlayed | cooldownPercentage | async">
       </md-progress-bar>
     </md-list-item>
-  </md-nav-list>
+  </md-list>
+  <ng-template #loading>
+    <md-spinner></md-spinner>
+  </ng-template>
   <md-card-actions [ngSwitch]="challengeState$ | async" align="center">
     <ng-template [ngSwitchCase]="0">
-      <!--<app-challenge-nostate></app-challenge-nostate>-->
-    </ng-template>
-    <ng-template [ngSwitchCase]="1">
-      <button [routerLink]="['/challenge']" color="accent" md-raised-button>You are Challenged!</button>
+      <button [routerLink]="['/login']" color="primary" md-raised-button>Login</button>
+      <button [routerLink]="['/register']" color="primary" md-button>Register</button>
     </ng-template>
     <ng-template [ngSwitchCase]="2">
-      <button [routerLink]="['/challenge']" color="primary" md-button>You've challenged {{(opponent$ | async).$key | username | async}}</button>
+      <button [routerLink]="['/challenge']" color="accent" md-raised-button>You are Challenged!</button>
     </ng-template>
     <ng-template [ngSwitchCase]="3">
+      <button [routerLink]="['/challenge']" color="primary" md-button>You've challenged {{(opponent$ | async).$key | username | async}}</button>
+    </ng-template>
+    <ng-template [ngSwitchCase]="4">
       <button [routerLink]="['/challenge']" (click)="initChallenge()" color="primary" md-raised-button>Challenge {{(opponent$ | async).$key | username | async}}</button>
     </ng-template>
   </md-card-actions>

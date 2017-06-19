@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Challenge } from '../../../models/challenge';
 
 @Component({
@@ -8,10 +8,14 @@ import { Challenge } from '../../../models/challenge';
 })
 export class ChallengeIsChallengedComponent implements OnInit {
   @Input() challenge: Challenge;
+  @Output() private challengeAccepted = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  emitChallengeAccepted(value: boolean) {
+    this.challengeAccepted.emit(value);
+  }
 }

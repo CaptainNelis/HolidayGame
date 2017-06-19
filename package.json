@@ -6,7 +6,7 @@
     "postinstall": "cd functions && npm install",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && tsc --project functions",
+    "build": "ng build --prod && tsc --project functions",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

@@ -4,7 +4,7 @@
     You have been challenged by {{challenge.challenger | username | async}}.
   </md-card-content>
   <md-card-actions align="center">
-    <button color="primary" md-raised-button>Accept</button>
-    <button color="warn" md-button>Decline</button>
+    <button (click)="emitChallengeAccepted(true)" color="primary" md-raised-button>Accept</button>
+    <button (click)="emitChallengeAccepted(false)" color="warn" md-button>Decline</button>
   </md-card-actions>
 </md-card>

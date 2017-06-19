@@ -31,4 +31,8 @@ export class ChallengeComponent implements OnInit {
   initChallenge(): Promise<any> {
     return this.challengeService.initChallenge();
   }
+
+  setChallengeAccepted(value: boolean): Promise<any> {
+    return this.challengeService.setAccepted(value);
+  }
 }

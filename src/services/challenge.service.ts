@@ -113,8 +113,10 @@ export class ChallengeService {
                 return Observable.of(ChallengeState.HASCHALLENGED);
               } else if (canChallenge) {
                 return Observable.of(ChallengeState.CANCHALLENGE);
+              } else if (player.position === 1) {
+                return Observable.of(ChallengeState.FIRSTPLACE);
               } else {
-                return Observable.of(ChallengeState.NOSTATE);
+                return Observable.of(ChallengeState.WAITING);
               }
             })
         } else {
@@ -158,6 +160,17 @@ export class ChallengeService {
             challengee: opponent.$key
           })
         }
+      })
+      .first()
+      .toPromise()
+  }
+
+  setAccepted(value: boolean): Promise<any> {
+    return this.isChallenged$
+      .switchMap((challenge: Challenge) => {
+        return this.angularFireDatabase.object('challenges/' + challenge.$key).update({
+          accepted: value
+        });
       })
       .first()
       .toPromise()

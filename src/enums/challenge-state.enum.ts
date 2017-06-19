@@ -1,6 +1,8 @@
 export enum ChallengeState {
   NOSTATE = 0,
-  ISCHALLENGED = 1,
-  HASCHALLENGED = 2,
-  CANCHALLENGE = 3,
+  WAITING = 1,
+  ISCHALLENGED = 2,
+  HASCHALLENGED = 3,
+  CANCHALLENGE = 4,
+  FIRSTPLACE = 5,
 }
