@@ -5,6 +5,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 import 'rxjs/add/operator/shareReplay';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/first';
+import 'rxjs/add/observable/of';
 import { AFUnwrappedDataSnapshot } from 'angularfire2/interfaces';
 
 @Injectable()
