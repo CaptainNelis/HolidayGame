@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Challenge } from '../../../models/challenge';
+import {ChallengeService} from "../../../services/challenge.service";
+import {Observable} from "rxjs/Observable";
+import {InChallengeState} from "../../../enums/in-challenge-state.enum";
 
 @Component({
   selector: 'app-challenge-is-challenged',
@@ -7,15 +10,22 @@ import { Challenge } from '../../../models/challenge';
   styleUrls: ['./challenge-is-challenged.component.css']
 })
 export class ChallengeIsChallengedComponent implements OnInit {
+  InChallengeState = InChallengeState;
   @Input() challenge: Challenge;
-  @Output() private challengeAccepted = new EventEmitter();
+  inChallengeState$: Observable<InChallengeState>;
 
-  constructor() { }
+  constructor(private challengeService: ChallengeService) {
+    this.inChallengeState$ = this.challengeService.inChallengeState$;
+  }
 
   ngOnInit() {
   }
 
-  emitChallengeAccepted(value: boolean) {
-    this.challengeAccepted.emit(value);
+  setChallengeAccepted(value: boolean): Promise<any> {
+    return this.challengeService.setAccepted(value);
+  }
+
+  setPlayerAsLoser() {
+    return this.challengeService.setPlayerAsLoser();
   }
 }

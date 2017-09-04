@@ -1,6 +1,7 @@
 export class Player {
-  public $key?: string;
-  public isLocked: boolean;
-  public lastPlayed: number;
-  public position: number;
+  $key?: string;
+  isLocked: boolean;
+  lastPlayed: number;
+  position: number;
+  challenge: string;
 }

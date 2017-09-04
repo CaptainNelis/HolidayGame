@@ -37,9 +37,6 @@
           <a md-line>Join Game</a>
         </md-list-item>
       </ng-template>
-      <md-list-item [routerLink]="['/account-settings']" (click)="sidenavright.close()">
-        <a md-line>Account Settings</a>
-      </md-list-item>
       <md-list-item (click)="sidenavright.close(); userService.logout()">
         <a md-line>Logout</a>
       </md-list-item>

@@ -16,7 +16,6 @@ import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MATERIAL_MODULES } from '../modules/material.module';
 import { environment } from '../environments/environment';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { UsernamePipe } from '../pipes/username.pipe';
 import { ChallengeService } from '../services/challenge.service';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -37,7 +36,6 @@ const appRoutes: Routes = [
   {path: 'leaderboard', component: LeaderboardComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'account-settings', component: AccountSettingsComponent},
 ];
 
 @NgModule({
@@ -47,7 +45,6 @@ const appRoutes: Routes = [
     LeaderboardComponent,
     LoginComponent,
     RegisterComponent,
-    AccountSettingsComponent,
     UsernamePipe,
     CooldownPercentagePipe,
     ChallengeNostateComponent,

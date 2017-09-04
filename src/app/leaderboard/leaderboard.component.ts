@@ -3,7 +3,6 @@ import { PlayerService } from '../../services/player.service';
 import { Observable } from 'rxjs/Observable';
 import { Player } from '../../models/player';
 import { ChallengeService } from '../../services/challenge.service';
-import { Challenge } from '../../models/challenge';
 import { ChallengeState } from '../../enums/challenge-state.enum';
 
 @Component({
@@ -12,6 +11,7 @@ import { ChallengeState } from '../../enums/challenge-state.enum';
   styleUrls: ['./leaderboard.component.css']
 })
 export class LeaderboardComponent implements OnInit {
+  ChallengeState = ChallengeState;
   player$: Observable<Player>;
   opponent$: Observable<Player>;
   players$: Observable<Player[]>;

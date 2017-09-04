@@ -1,7 +1,27 @@
 <md-card>
   <md-card-title align="center">Challengeboard</md-card-title>
-  <md-card-content>
-    You have challenged {{challenge.challengee | username | async}}.
-    Wait for {{challenge.challengee | username | async}} to accept or decline your challenge.
-  </md-card-content>
+  <ng-container [ngSwitch]="inChallengeState$ | async">
+    <ng-template [ngSwitchCase]="InChallengeState.ACCEPT">
+      <md-card-content>
+        You have challenged {{challenge.challengee | username | async}}.
+        Wait for {{challenge.challengee | username | async}} to accept or decline your challenge.
+      </md-card-content>
+    </ng-template>
+    <ng-template [ngSwitchCase]="InChallengeState.GAME">
+      <md-card-content>
+        You should select a game to play.
+      </md-card-content>
+      <md-card-actions align="center">
+        <button (click)="selectGame()" color="primary" md-raised-button>SelectGame</button>
+      </md-card-actions>
+    </ng-template>
+    <ng-template [ngSwitchCase]="InChallengeState.WINNER">
+      <md-card-content>
+        Now go and play the game you had selected. If you have lost the game press the button below. If you have won let the other player press the button his/her phone.
+      </md-card-content>
+      <md-card-actions align="center">
+        <button (click)="setPlayerAsLoser()" color="primary" md-raised-button>I'm a loser!</button>
+      </md-card-actions>
+    </ng-template>
+  </ng-container>
 </md-card>

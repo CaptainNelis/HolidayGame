@@ -12,6 +12,7 @@ import { PlayerService } from '../../services/player.service';
   styleUrls: ['./challenge.component.css']
 })
 export class ChallengeComponent implements OnInit {
+  ChallengeState = ChallengeState;
   challengeState$: Observable<ChallengeState>;
   isChallenged$: Observable<Challenge>;
   hasChallenged$: Observable<Challenge>;
@@ -30,9 +31,5 @@ export class ChallengeComponent implements OnInit {
 
   initChallenge(): Promise<any> {
     return this.challengeService.initChallenge();
-  }
-
-  setChallengeAccepted(value: boolean): Promise<any> {
-    return this.challengeService.setAccepted(value);
   }
 }

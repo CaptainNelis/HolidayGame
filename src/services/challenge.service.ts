@@ -1,33 +1,100 @@
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
-import { PlayerService } from './player.service';
-import { TimeService } from './time.service';
-import { Player } from '../models/player';
-import { AFUnwrappedDataSnapshot } from 'angularfire2/interfaces';
+import {Injectable} from '@angular/core';
+import {AngularFireDatabase} from 'angularfire2/database';
+import {Observable} from 'rxjs/Observable';
+import {PlayerService} from './player.service';
+import {TimeService} from './time.service';
+import {Player} from '../models/player';
+import {AFUnwrappedDataSnapshot} from 'angularfire2/interfaces';
 import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/distinctUntilChanged';
-import { Challenge } from '../models/challenge';
-import { ChallengeState } from '../enums/challenge-state.enum';
+import {Challenge} from '../models/challenge';
+import {ChallengeState} from '../enums/challenge-state.enum';
+import {InChallengeState} from "../enums/in-challenge-state.enum";
 
 @Injectable()
 export class ChallengeService {
+  readonly challenge$: Observable<Challenge>;
+  readonly isChallenger$: Observable<boolean>;
+  readonly isChallengee$: Observable<boolean>;
   readonly canChallenge$: Observable<boolean>;
   readonly hasChallenged$: Observable<Challenge>;
   readonly isChallenged$: Observable<Challenge>;
   readonly challengeState$: Observable<ChallengeState>;
+  readonly inChallengeState$: Observable<InChallengeState>;
 
   constructor(private angularFireDatabase: AngularFireDatabase,
               private playerService: PlayerService,
               private timeService: TimeService) {
+    this.challenge$ = this.getChallenge$();
+    this.isChallenger$ = this.getIsChallenger$();
+    this.isChallengee$ = this.getIsChallengee$();
     this.canChallenge$ = this.getCanChallenge$();
     this.hasChallenged$ = this.getHasChallenged$();
     this.isChallenged$ = this.getIsChallenged$();
     this.challengeState$ = this.getChallengeState$();
-    this.isChallenged$.subscribe(data => console.log('isChallenged$', data));
-    this.canChallenge$.subscribe(data => console.log('canChallenge$', data));
-    this.hasChallenged$.subscribe(data => console.log('hasChallenged', data));
-    this.challengeState$.subscribe(data => console.log('challengeState', data));
+    this.inChallengeState$ = this.getInChallengeState$();
+    this.challenge$.subscribe(data => console.log('challenge$', data));
+    // this.isChallenger$.subscribe(data => console.log('isChallenger$', data));
+    // this.isChallengee$.subscribe(data => console.log('isChallengee$', data));
+    // this.isChallenged$.subscribe(data => console.log('isChallenged$', data));
+    // this.canChallenge$.subscribe(data => console.log('canChallenge$', data));
+    // this.hasChallenged$.subscribe(data => console.log('hasChallenged', data));
+    // this.challengeState$.subscribe(data => console.log('challengeState', data));
+    this.inChallengeState$.subscribe(data => console.log('inChallengeState', data));
+  }
+
+  /**
+   * Get Challenge of Player.
+   * @returns {Observable<Challenge>}
+   */
+  private getChallenge$(): Observable<Challenge> {
+    return this.playerService.player$
+      .switchMap((player: Player) => {
+        if (player) {
+          if (player.challenge) {
+            return this.angularFireDatabase.object(`challenges/${player.challenge}`)
+          }
+        }
+        return Observable.of(null)
+      })
+      .distinctUntilChanged()
+      .shareReplay(1);
+  }
+
+  /**
+   * Check if Player is challenger.
+   * @returns {Observable<boolean>}
+   */
+  private getIsChallenger$(): Observable<boolean> {
+    return this.playerService.player$
+      .combineLatest(this.challenge$)
+      .map(([player, challenge]) => {
+        if (player && challenge) {
+          return (player.$key === challenge.challenger)
+        } else {
+          return null
+        }
+      })
+      .distinctUntilChanged()
+      .shareReplay(1);
+  }
+
+  /**
+   * Check if Player is challengee.
+   * @returns {Observable<boolean>}
+   */
+  private getIsChallengee$(): Observable<boolean> {
+    return this.playerService.player$
+      .combineLatest(this.challenge$)
+      .map(([player, challenge]) => {
+        if (player && challenge) {
+          return (player.$key === challenge.challengee)
+        } else {
+          return null
+        }
+      })
+      .distinctUntilChanged()
+      .shareReplay(1);
   }
 
   /**
@@ -127,6 +194,23 @@ export class ChallengeService {
       .shareReplay(1)
   }
 
+  private getInChallengeState$(): Observable<InChallengeState> {
+    return this.challenge$
+      .map((challenge: Challenge) => {
+        if (challenge) {
+          if (challenge.game) {
+            return InChallengeState.WINNER
+          } else if (challenge.accepted) {
+            return InChallengeState.GAME
+          } else {
+            return InChallengeState.ACCEPT
+          }
+        }
+      })
+      .distinctUntilChanged()
+      .shareReplay(1)
+  }
+
   /**
    * Get Challenge cooldown percentage.
    * @param lastPlayed
@@ -171,6 +255,29 @@ export class ChallengeService {
         return this.angularFireDatabase.object('challenges/' + challenge.$key).update({
           accepted: value
         });
+      })
+      .first()
+      .toPromise()
+  }
+
+  setGame(gameKey: string): Promise<any> {
+    return this.challenge$
+      .switchMap((challenge: Challenge) => {
+        return this.angularFireDatabase.object('challenges/' + challenge.$key).update({
+          game: gameKey
+        })
+      })
+      .first()
+      .toPromise()
+  }
+
+  setPlayerAsLoser() {
+    return this.playerService.player$
+      .combineLatest(this.challenge$)
+      .switchMap(([player, challenge]) => {
+        return this.angularFireDatabase.object('challenges/' + challenge.$key).update({
+          loser: player.$key
+        })
       })
       .first()
       .toPromise()
